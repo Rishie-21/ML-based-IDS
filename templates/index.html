@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Model Predictions</title>
+    <style>
+        /* Basic styling */
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .container { width: 80%; margin: 0 auto; }
+        .form-group { margin-bottom: 10px; }
+        .form-group label { margin-right: 10px; }
+        .form-group input { padding: 5px; }
+        button { padding: 10px 15px; background-color: #4CAF50; color: white; border: none; cursor: pointer; }
+        button:hover { background-color: #45a049; }
+        .results { margin-top: 20px; padding: 10px; background-color: #f2f2f2; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Enter Data for Prediction</h2>
+        <form method="POST">
+            {% for column in column_names %}
+            <div class="form-group">
+                <label for="{{ column }}">{{ column.replace('_', ' ') }}:</label>
+                <input type="number" id="{{ column }}" name="{{ column }}" required>
+            </div>
+            {% endfor %}
+            <button type="submit">Predict</button>
+        </form>
+
+        {% if predictions %}
+        <div class="results">
+            <h3>Prediction Results</h3>
+            <p><strong>Random Forest Prediction:</strong> {{ predictions.rf.prediction }}</p>
+            <p><strong>Decision Tree Prediction:</strong> {{ predictions.dt.prediction }}</p>
+            <p><strong>SVM Prediction:</strong> {{ predictions.svm.prediction }}</p>
+            <p><strong>KNN Prediction:</strong> {{ predictions.knn.prediction }}</p>
+            <p><strong>Combined Prediction:</strong> {{ predictions.combined }}</p>
+            <p><strong>Calculation Steps:</strong> {{ predictions.calculation_steps }}</p>
+        </div>
+        {% endif %}
+
+        {% if accuracies %}
+        <div class="model-accuracies">
+            <h3>Model Accuracies</h3>
+            <table>
+                <tr>
+                    <th>Model</th>
+                    <th>Accuracy</th>
+                </tr>
+                {% for model, accuracy in accuracies.items() %}
+                <tr>
+                    <td>{{ model.upper() }}</td>
+                    <td>{{ accuracy }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
